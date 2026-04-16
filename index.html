@@ -44,53 +44,56 @@
        Barba.js replaces the *container* (below) on every navigation.
        Everything outside this wrapper — canvas, header — is untouched. -->
   <div id="barba-wrapper" data-barba="wrapper">
-    <main class="page-container"
-          data-barba="container"
-          data-barba-namespace="home">
-
+    <div class="page-container">
+      <!-- ── Content Panel ──────────────────────────────────────────────────
+           The panel (frosted card + shadow) is persistent — it sits OUTSIDE
+           the Barba container so it never duplicates or fades during
+           transitions. Only the <main> inside swaps. -->
       <div class="content-panel">
-        <!-- Hero -->
-        <section class="section section--hero">
-          <h1 class="display-title">
-            The Deveraux<br />Family Foundation
-          </h1>
-          <p class="tagline">
-            We aim to identify and support organizations that make the world a better place.
-          </p>
-        </section>
-        <!-- Our Story -->
-        <section class="section section--alt">
-          <h2>Our Story</h2>
-          <!--
-            PLACEHOLDER — replace this text with the foundation's actual history.
-          -->
-          <p>
-            The Deveraux Family Foundation was established with a simple but enduring belief:
-            that private resources, directed with care and intention, can amplify the work of
-            organizations already transforming lives. What began as a family conversation around
-            shared values has grown into a focused vehicle for meaningful giving.
-          </p>
-          <p>
-            We approach philanthropy as a long-term partnership — not a transaction. We seek out
-            organizations whose leadership is visionary, whose impact is measurable, and whose
-            communities would be genuinely diminished without them.
-          </p>
-        </section>
-        <!-- Our Mission -->
-        <section class="section">
-          <h2>Our Mission</h2>
-          <!--
-            PLACEHOLDER — replace with the foundation's mission statement or guiding principles.
-          -->
-          <p>
-            Our mission is to identify, support, and sustain non-profit and not-for-profit
-            organizations working toward a more equitable, sustainable, and compassionate world.
-            We prioritize relationships built on trust, transparency, and a genuine commitment
-            to the communities our partners serve.
-          </p>
-        </section>
+        <main data-barba="container" data-barba-namespace="home">
+          <!-- Hero -->
+          <section class="section section--hero">
+            <h1 class="display-title">
+              The Deveraux<br />Family Foundation
+            </h1>
+            <p class="tagline">
+              We aim to identify and support organizations that make the world a better place.
+            </p>
+          </section>
+          <!-- Our Story -->
+          <section class="section section--alt">
+            <h2>Our Story</h2>
+            <!--
+              PLACEHOLDER — replace this text with the foundation's actual history.
+            -->
+            <p>
+              The Deveraux Family Foundation was established with a simple but enduring belief:
+              that private resources, directed with care and intention, can amplify the work of
+              organizations already transforming lives. What began as a family conversation around
+              shared values has grown into a focused vehicle for meaningful giving.
+            </p>
+            <p>
+              We approach philanthropy as a long-term partnership — not a transaction. We seek out
+              organizations whose leadership is visionary, whose impact is measurable, and whose
+              communities would be genuinely diminished without them.
+            </p>
+          </section>
+          <!-- Our Mission -->
+          <section class="section">
+            <h2>Our Mission</h2>
+            <!--
+              PLACEHOLDER — replace with the foundation's mission statement or guiding principles.
+            -->
+            <p>
+              Our mission is to identify, support, and sustain non-profit and not-for-profit
+              organizations working toward a more equitable, sustainable, and compassionate world.
+              We prioritize relationships built on trust, transparency, and a genuine commitment
+              to the communities our partners serve.
+            </p>
+          </section>
+        </main>
       </div><!-- /.content-panel -->
-    </main>
+    </div><!-- /.page-container -->
   </div><!-- /#barba-wrapper -->
   <!-- ── Scripts ─────────────────────────────────────────────────────────────
        importmap maps bare module specifiers (e.g. 'three') to CDN URLs.

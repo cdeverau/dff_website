@@ -188,6 +188,7 @@ body {
   "floating" look.
 */
 .content-panel {
+  position: relative;           /* anchors the outgoing <main> when it's absolute-positioned during a Barba transition */
   width: 100%;
   max-width: var(--panel-max-w);
   background: var(--panel-bg);

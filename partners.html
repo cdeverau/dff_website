@@ -31,11 +31,13 @@
     </div>
   </header>
   <div id="barba-wrapper" data-barba="wrapper">
-    <main class="page-container"
-          data-barba="container"
-          data-barba-namespace="partners">
-
+    <div class="page-container">
+      <!-- ── Content Panel ──────────────────────────────────────────────────
+           The panel (frosted card + shadow) is persistent — it sits OUTSIDE
+           the Barba container so it never duplicates or fades during
+           transitions. Only the <main> inside swaps. -->
       <div class="content-panel">
+        <main data-barba="container" data-barba-namespace="partners">
         <!-- Page title -->
         <section class="section section--page-title">
           <h1 class="page-title">Our Partners</h1>
@@ -121,8 +123,9 @@
             specific contribution to this organization's work.
           </div>
         </div>
+        </main>
       </div><!-- /.content-panel -->
-    </main>
+    </div><!-- /.page-container -->
   </div><!-- /#barba-wrapper -->
   <script type="importmap">
   {

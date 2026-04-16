@@ -1,20 +1,9 @@
 /**
- * app.js — Application entry point
+ * app.js — Three.js background, Barba page transitions (with GSAP), nav state.
  *
- * Responsibilities:
- *   1. Three.js  — spins up a fullscreen WebGL renderer for the background shader
- *   2. Barba.js  — intercepts navigation so page transitions are animated instead
- *                  of hard reloads
- *   3. GSAP      — powers the enter/leave animations for each transition
- *   4. Nav state — keeps the active nav link in sync with the current page
- *
- * Because <canvas> and <header> live outside the Barba wrapper, they persist
- * across every transition — only the page content swaps.
- *
- * Note on imports:
- *   Three.js is pulled in via the importmap defined in each HTML file.
- *   GSAP and Barba are loaded as ES modules from their own script tags (also
- *   via the same importmap), so they're available as normal imports here.
+ * Persistent across transitions: <canvas>, <header>, and .content-panel.
+ * Only <main data-barba="container"> swaps. Imports resolve via the
+ * importmap in each HTML file.
  */
 
 import * as THREE from 'three';
@@ -31,9 +20,7 @@ const canvas   = document.getElementById('bg-canvas');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
 const scene    = new THREE.Scene();
 
-// Orthographic camera + PlaneGeometry(2,2) fills the clip-space exactly.
-// This is the standard "fullscreen quad" technique — identical in concept to a
-// fullscreen quad in a game engine.
+// Standard fullscreen-quad: orthographic camera + 2x2 plane fills clip space.
 const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
 camera.position.z = 1;
 
@@ -57,7 +44,6 @@ function onResize() {
 onResize();
 window.addEventListener('resize', onResize);
 
-// Main render loop — runs continuously in the background
 const clock = new THREE.Clock();
 (function tick() {
   requestAnimationFrame(tick);
@@ -69,10 +55,7 @@ const clock = new THREE.Clock();
 //  Active Navigation State
 // =============================================================================
 
-/**
- * Maps the data-barba-namespace on each page's container to the href used
- * in the nav. Update these if you add or rename pages.
- */
+// Maps data-barba-namespace → nav link href. Update when adding/renaming pages.
 const NAMESPACE_TO_HREF = {
   home:     'index.html',
   about:    'about.html',
@@ -80,6 +63,7 @@ const NAMESPACE_TO_HREF = {
   contact:  'contact.html',
 };
 
+// Used by once() and enter() — the source of truth for popstate + initial load.
 function setActiveNav(namespace) {
   const target = NAMESPACE_TO_HREF[namespace];
   document.querySelectorAll('.nav-link').forEach(link => {
@@ -87,20 +71,35 @@ function setActiveNav(namespace) {
   });
 }
 
+// Used by the click handler to mark active *before* Barba's fetch+enter runs,
+// so a quick double-click is caught by the "already active" guard.
+function setActiveNavFromLink(link) {
+  if (!link.classList.contains('nav-link')) return;
+  document.querySelectorAll('.nav-link').forEach(l => {
+    l.classList.toggle('active', l === link);
+  });
+}
+
 // =============================================================================
 //  Barba.js — Page Transitions
 // =============================================================================
+//
+// .content-panel is persistent (lives OUTSIDE data-barba="container"). Only
+// the <main> inside swaps. This lets us animate one panel's height between
+// pages, cross-fade only the section children, and handle spam-click
+// collisions without ever touching the panel's shadow.
 
-// Height of the outgoing panel, captured in `leave` and consumed in `enter`
-// so the incoming panel can animate from the right starting size.
+// Height to animate the panel FROM on next enter; set by leave, read by enter.
 let prevPanelHeight = null;
 
-// Refs held during an active enter animation so the interrupt handler can
-// kill it, fade the container out from its current visual state, and then
-// settle barba's promise to unblock the next navigation.
+// Refs to the in-flight enter animation, held so the click-time collision
+// handler can kill it and settle barba's promise before starting the next nav.
 let activeEnterTl       = null;
 let activeEnterResolve  = null;
 let activeNextContainer = null;
+
+// Persistent — safe to cache once.
+const panel = document.querySelector('.content-panel');
 
 barba.init({
   // Ignore links that point outside the site
@@ -110,19 +109,14 @@ barba.init({
     {
       name: 'slide-fade',
 
-      // Run leave and enter at the same time so old content fades out while
-      // new content is already animating in.
+      // Run leave + enter in parallel so old content fades while new slides in.
       sync: true,
 
-      /**
-       * `once` fires exactly once, on the very first page load.
-       * Animates the initial content in so the site never just "pops" into view.
-       */
+      // Initial page load — fade/slide the sections in so the site doesn't pop.
       once({ next }) {
         setActiveNav(next.namespace);
-        const panel = next.container.querySelector('.content-panel');
 
-        return gsap.from(panel.children, {
+        return gsap.from(next.container.children, {
           opacity:    0,
           y:          -100,
           duration:   0.5,
@@ -131,48 +125,50 @@ barba.init({
         });
       },
 
-      /**
-       * `leave` fades the current page out over 0.25 s.
-       * Runs simultaneously with `enter` because sync: true is set above.
-       *
-       * With sync mode both containers are in the DOM at the same time. Locking
-       * the outgoing container to its current screen position (fixed) removes it
-       * from normal flow so the incoming container can lay out correctly.
-       */
+      // Lock the panel's current height, abs-position the outgoing <main>
+      // inside it so only the incoming drives layout, and fade outgoing sections.
       leave({ current }) {
-        // Snapshot the panel's natural height for the enter animation.
-        prevPanelHeight = current.container.querySelector('.content-panel')?.offsetHeight ?? null;
+        // If panel is mid-animation (collision case), its inline height is the
+        // visible height. Otherwise read the outgoing <main>'s own height —
+        // panel.offsetHeight at this point includes the incoming sibling.
+        const lockedHeight = panel.style.height
+          ? parseFloat(panel.style.height)
+          : current.container.offsetHeight;
 
-        const { top, left, width } = current.container.getBoundingClientRect();
+        prevPanelHeight    = lockedHeight;
+        panel.style.height = lockedHeight + 'px';
+
         Object.assign(current.container.style, {
-          position:      'fixed',
-          top:           top + 'px',
-          left:          left + 'px',
-          width:         width + 'px',
-          margin:        '0',
-          zIndex:        '5',
+          position:      'absolute',
+          top:           '0',
+          left:          '0',
+          width:         '100%',
           pointerEvents: 'none',
         });
-        return gsap.to(current.container, {
+
+        return gsap.to(current.container.children, {
           opacity:  0,
           duration: 0.25,
           ease:     'power2.out',
         });
       },
 
-      /**
-       * `enter` runs two animations in parallel via a timeline:
-       *   1. The panel background resizes from the outgoing page's height to its own.
-       *   2. The sections inside fade in and slide down from 100 px above.
-       */
+      // Animate the persistent panel's height to its new natural value while
+      // fading + sliding the incoming sections in from above.
       enter({ next }) {
         setActiveNav(next.namespace);
         window.scrollTo(0, 0);
 
         activeNextContainer = next.container;
 
-        const panel      = next.container.querySelector('.content-panel');
         const fromHeight = prevPanelHeight ?? panel.offsetHeight;
+
+        // Measure new natural height: clear the lock, read, restore — all
+        // synchronous so no paint happens in between.
+        const savedHeight  = panel.style.height;
+        panel.style.height = '';
+        const toHeight     = panel.offsetHeight;
+        panel.style.height = savedHeight;
 
         return new Promise(resolve => {
           activeEnterResolve = resolve;
@@ -182,20 +178,18 @@ barba.init({
               activeEnterTl       = null;
               activeEnterResolve  = null;
               activeNextContainer = null;
+              panel.style.height  = ''; // release lock — panel stays responsive
               resolve();
             },
           });
 
-          // Panel shell: height-only animation, no positional movement
-          activeEnterTl.from(panel, {
-            height:     fromHeight,
-            duration:   0.5,
-            ease:       'power2.out',
-            clearProps: 'height',
-          }, 0);
+          activeEnterTl.fromTo(panel,
+            { height: fromHeight },
+            { height: toHeight, duration: 0.5, ease: 'power2.out' },
+            0
+          );
 
-          // Content inside: fade + slide down from above
-          activeEnterTl.from(panel.children, {
+          activeEnterTl.from(next.container.children, {
             opacity:    0,
             y:          -100,
             duration:   0.5,
@@ -217,18 +211,24 @@ document.addEventListener('click', e => {
   const link = e.target.closest('a');
   if (!link || link.hostname !== window.location.hostname) return;
 
+  // Swallow repeat clicks on the active link (also catches fast double-clicks,
+  // since the active state is updated below before this handler returns).
   if (link.classList.contains('active')) {
     e.preventDefault();
     e.stopImmediatePropagation();
+    return;
   }
 
   if (isTransitioning) {
     e.preventDefault();
     e.stopImmediatePropagation();
 
-    if (!activeEnterTl) return; // enter hasn't started yet, drop the click
+    if (!activeEnterTl) return; // enter hasn't started yet — drop the click
 
-    // Snapshot and clear refs so the natural onComplete can't fire after this.
+    setActiveNavFromLink(link);
+
+    // Snapshot + clear refs so the timeline's natural onComplete can't fire
+    // after we've kicked off the collision fade.
     const tl        = activeEnterTl;
     const container = activeNextContainer;
     const resolve   = activeEnterResolve;
@@ -237,20 +237,21 @@ document.addEventListener('click', e => {
     activeEnterResolve  = null;
     activeNextContainer = null;
 
-    // Stop the enter animation wherever it is, leaving the container in its
-    // current visual state, then fade the whole container out from there.
+    // Freeze enter at its current state, fade the incoming sections out from
+    // there, then hand off to the next nav. Panel height stays locked so the
+    // next transition picks up continuity; the shadow never flickers.
     tl.kill();
-    gsap.to(container, {
+    gsap.to(container.children, {
       opacity:  0,
       duration: 0.2,
       ease:     'power2.in',
       onComplete() {
-        // Settle barba's enter promise so it resets transitioning state.
-        resolve();
-        // Defer one frame to give barba time to finish its cleanup before
-        // we ask it to start a new transition.
-        requestAnimationFrame(() => barba.go(href));
+        resolve();                                          // settle barba's promise
+        requestAnimationFrame(() => barba.go(href));        // defer a frame for barba cleanup
       },
     });
+    return;
   }
+
+  setActiveNavFromLink(link);
 }, true);
