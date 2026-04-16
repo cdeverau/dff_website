@@ -95,6 +95,13 @@ function setActiveNav(namespace) {
 // so the incoming panel can animate from the right starting size.
 let prevPanelHeight = null;
 
+// Refs held during an active enter animation so the interrupt handler can
+// kill it, fade the container out from its current visual state, and then
+// settle barba's promise to unblock the next navigation.
+let activeEnterTl       = null;
+let activeEnterResolve  = null;
+let activeNextContainer = null;
+
 barba.init({
   // Ignore links that point outside the site
   prevent: ({ el }) => el.hostname !== window.location.hostname,
@@ -162,31 +169,88 @@ barba.init({
         setActiveNav(next.namespace);
         window.scrollTo(0, 0);
 
-        const panel        = next.container.querySelector('.content-panel');
-        const targetHeight = panel.offsetHeight;
-        const fromHeight   = prevPanelHeight ?? targetHeight;
+        activeNextContainer = next.container;
 
-        const tl = gsap.timeline();
+        const panel      = next.container.querySelector('.content-panel');
+        const fromHeight = prevPanelHeight ?? panel.offsetHeight;
 
-        // Panel shell: height-only animation, no positional movement
-        tl.from(panel, {
-          height:     fromHeight,
-          duration:   0.5,
-          ease:       'power2.out',
-          clearProps: 'height',
-        }, 0);
+        return new Promise(resolve => {
+          activeEnterResolve = resolve;
 
-        // Content inside: fade + slide down from above
-        tl.from(panel.children, {
-          opacity:    0,
-          y:          -100,
-          duration:   0.5,
-          ease:       'power2.out',
-          clearProps: 'all',
-        }, 0);
+          activeEnterTl = gsap.timeline({
+            onComplete() {
+              activeEnterTl       = null;
+              activeEnterResolve  = null;
+              activeNextContainer = null;
+              resolve();
+            },
+          });
 
-        return tl;
+          // Panel shell: height-only animation, no positional movement
+          activeEnterTl.from(panel, {
+            height:     fromHeight,
+            duration:   0.5,
+            ease:       'power2.out',
+            clearProps: 'height',
+          }, 0);
+
+          // Content inside: fade + slide down from above
+          activeEnterTl.from(panel.children, {
+            opacity:    0,
+            y:          -100,
+            duration:   0.5,
+            ease:       'power2.out',
+            clearProps: 'all',
+          }, 0);
+        });
       },
     },
   ],
 });
+
+let isTransitioning = false;
+
+barba.hooks.before(() => { isTransitioning = true;  });
+barba.hooks.after(()  => { isTransitioning = false; });
+
+document.addEventListener('click', e => {
+  const link = e.target.closest('a');
+  if (!link || link.hostname !== window.location.hostname) return;
+
+  if (link.classList.contains('active')) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }
+
+  if (isTransitioning) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    if (!activeEnterTl) return; // enter hasn't started yet, drop the click
+
+    // Snapshot and clear refs so the natural onComplete can't fire after this.
+    const tl        = activeEnterTl;
+    const container = activeNextContainer;
+    const resolve   = activeEnterResolve;
+    const href      = link.getAttribute('href');
+    activeEnterTl       = null;
+    activeEnterResolve  = null;
+    activeNextContainer = null;
+
+    // Stop the enter animation wherever it is, leaving the container in its
+    // current visual state, then fade the whole container out from there.
+    tl.kill();
+    gsap.to(container, {
+      opacity:  0,
+      duration: 0.2,
+      ease:     'power2.in',
+      onComplete() {
+        // Settle barba's enter promise so it resets transitioning state.
+        resolve();
+        // Defer one frame to give barba time to finish its cleanup before
+        // we ask it to start a new transition.
+        requestAnimationFrame(() => barba.go(href));
+      },
+    });
+  }
+}, true);
