@@ -112,16 +112,23 @@ barba.init({
       // Run leave + enter in parallel so old content fades while new slides in.
       sync: true,
 
-      // Initial page load — fade/slide the sections in so the site doesn't pop.
+      // Initial page load — fade the solid intro overlay out to reveal the
+      // already-settled page. Only runs on real page loads (fresh tab or
+      // refresh); Barba-driven nav uses leave/enter and never fires once.
       once({ next }) {
         setActiveNav(next.namespace);
 
-        return gsap.from(next.container.children, {
-          opacity:    0,
-          y:          -100,
-          duration:   0.5,
-          ease:       'power2.out',
-          clearProps: 'all',
+        const overlay = document.getElementById('intro-overlay');
+        if (!overlay) return;
+
+        return gsap.to(overlay, {
+          opacity:  0,
+          duration: 0.5,
+          ease:     'power2.out',
+          onComplete() {
+            overlay.remove();
+            document.documentElement.classList.remove('show-intro');
+          },
         });
       },
 

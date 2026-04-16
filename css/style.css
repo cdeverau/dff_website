@@ -68,6 +68,27 @@ body {
   display: block;
 }
 
+/* ── Intro Overlay ───────────────────────────────────────────────────────── */
+/*
+  Solid cover shown only on the first page load of a session. The inline
+  <head> script on each HTML page toggles `html.show-intro` before body paints,
+  so repeat loads never see the overlay and first loads never flash content.
+  Sits above canvas, header, and panel so the background shader can't bleed
+  through during the fade. app.js fades it out in the Barba `once` hook.
+*/
+#intro-overlay {
+  display: none;
+}
+
+html.show-intro #intro-overlay {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--clr-bg);
+  pointer-events: none;
+}
+
 /* ── Header ──────────────────────────────────────────────────────────────── */
 .site-header {
   position: fixed;

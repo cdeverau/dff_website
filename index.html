@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="show-intro">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,6 +13,9 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <!-- Intro overlay — solid cover faded out by app.js on first session load.
+       Hidden by default; only visible when <html class="show-intro">. -->
+  <div id="intro-overlay"></div>
   <!-- Three.js renders the animated background into this canvas.
        It sits behind everything via z-index: 0. -->
   <canvas id="bg-canvas"></canvas>
