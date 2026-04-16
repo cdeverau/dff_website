@@ -123,7 +123,7 @@ barba.init({
 
         return gsap.to(overlay, {
           opacity:  0,
-          duration: 0.5,
+          duration: 1.0,
           ease:     'power2.out',
           onComplete() {
             overlay.remove();
@@ -155,6 +155,7 @@ barba.init({
 
         return gsap.to(current.container.children, {
           opacity:  0,
+          y:        50,
           duration: 0.25,
           ease:     'power2.out',
         });
@@ -250,7 +251,7 @@ document.addEventListener('click', e => {
     tl.kill();
     gsap.to(container.children, {
       opacity:  0,
-      duration: 0.2,
+      duration: 0.05,
       ease:     'power2.in',
       onComplete() {
         resolve();                                          // settle barba's promise
