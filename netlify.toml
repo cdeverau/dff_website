@@ -1,0 +1,40 @@
+# netlify.toml — Netlify build & deployment configuration
+# Docs: https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  # Serve from the repo root (no build step needed for a static site)
+  publish = "."
+
+# ── Security headers applied to every response ───────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+
+# ── Cache strategy ────────────────────────────────────────────────────────────
+# HTML: no cache — always fetch fresh so content updates are instant.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+# Assets (CSS, JS, images): cache for 1 year.
+# If you update these files, add a query string (?v=2) or rename them to bust
+# the cache. A proper build tool would do this automatically, but for a static
+# site it's easy enough to do by hand.
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

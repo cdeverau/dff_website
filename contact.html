@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — The Deveraux Family Foundation</title>
+  <meta name="description" content="Get in touch with the Deveraux Family Foundation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo-link">
+        <!-- <img src="assets/logo.png" alt="The Deveraux Family Foundation" class="logo-img" /> -->
+        <div class="logo-text">
+          <span class="logo-acronym">DFF</span>
+          <span class="logo-name">The Deveraux Family Foundation</span>
+        </div>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html"    class="nav-link">Home</a>
+        <a href="about.html"    class="nav-link">About Us</a>
+        <a href="partners.html" class="nav-link">Partners</a>
+        <a href="contact.html"  class="nav-link">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <div id="barba-wrapper" data-barba="wrapper">
+    <main class="page-container"
+          data-barba="container"
+          data-barba-namespace="contact">
+
+      <div class="content-panel">
+        <!-- Page title -->
+        <section class="section section--page-title">
+          <h1 class="page-title">Contact</h1>
+          <p class="page-subtitle">We'd love to hear from you.</p>
+        </section>
+        <!-- Contact info -->
+        <section class="section section--alt">
+          <h2>Get in Touch</h2>
+          <p>
+            Whether you represent an organization whose work aligns with our mission,
+            or you simply want to learn more about the foundation, we welcome the conversation.
+          </p>
+          <div class="contact-links">
+            <!--
+              REPLACE THE HREF VALUES:
+              • email:    Replace "foundation@example.com" with the foundation's actual email.
+              • linkedin: Replace the URL with the foundation's LinkedIn profile URL.
+            -->
+            <a href="mailto:foundation@example.com"
+               class="contact-btn contact-btn--email">
+              <!-- Email icon (inline SVG — no external dependency) -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              Email Us
+            </a>
+            <a href="https://www.linkedin.com/company/PLACEHOLDER"
+               class="contact-btn contact-btn--linkedin"
+               target="_blank"
+               rel="noopener noreferrer">
+              <!-- LinkedIn icon (inline SVG) -->
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                <rect x="2" y="9" width="4" height="12"/>
+                <circle cx="4" cy="4" r="2"/>
+              </svg>
+              LinkedIn
+            </a>
+          </div>
+        </section>
+      </div><!-- /.content-panel -->
+    </main>
+  </div><!-- /#barba-wrapper -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three":       "https://esm.sh/three@0.160.0",
+      "gsap":        "https://esm.sh/gsap@3.12.5",
+      "@barba/core": "https://esm.sh/@barba/core@2.9.7"
+    }
+  }
+  </script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

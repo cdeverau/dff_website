@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partners — The Deveraux Family Foundation</title>
+  <meta name="description" content="Organizations supported by the Deveraux Family Foundation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo-link">
+        <!-- <img src="assets/logo.png" alt="The Deveraux Family Foundation" class="logo-img" /> -->
+        <div class="logo-text">
+          <span class="logo-acronym">DFF</span>
+          <span class="logo-name">The Deveraux Family Foundation</span>
+        </div>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html"    class="nav-link">Home</a>
+        <a href="about.html"    class="nav-link">About Us</a>
+        <a href="partners.html" class="nav-link">Partners</a>
+        <a href="contact.html"  class="nav-link">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <div id="barba-wrapper" data-barba="wrapper">
+    <main class="page-container"
+          data-barba="container"
+          data-barba-namespace="partners">
+
+      <div class="content-panel">
+        <!-- Page title -->
+        <section class="section section--page-title">
+          <h1 class="page-title">Our Partners</h1>
+          <p class="page-subtitle">Organizations we're proud to support.</p>
+        </section>
+        <!--
+          Partner entries below.
+          TO ADD A PARTNER LOGO:
+          1. Place the logo file in assets/ (e.g. assets/partner-acme.png)
+          2. Replace the .partner-logo-placeholder div with:
+             <img src="assets/partner-acme.png" alt="Acme Nonprofit" />
+          3. The .partner-logo wrapper handles sizing automatically.
+          TO ADD MORE PARTNERS:
+          Duplicate one .partner-card block and update the content.
+          The alternating section tint is applied via CSS nth-child — it
+          adjusts automatically when you add or remove cards.
+        -->
+        <!-- Partner 1 -->
+        <div class="partner-card">
+          <div class="partner-header">
+            <div class="partner-logo">
+              <!--
+                Replace this placeholder with an <img> once you have the logo.
+                Example: <img src="assets/partner-1.png" alt="Partner Name" />
+              -->
+              <span class="partner-logo-placeholder">Logo</span>
+            </div>
+            <h2 class="partner-name"><!-- Partner Organization Name --></h2>
+          </div>
+          <p class="partner-description">
+            <!--
+              PLACEHOLDER — describe what this organization does: their mission,
+              who they serve, and what makes their work distinctive.
+            -->
+            A description of this partner organization — their mission, the communities
+            they serve, and the model that makes their work effective and enduring.
+            This section should give visitors a clear sense of what the organization
+            does before reading about the foundation's specific involvement.
+          </p>
+          <div class="partner-support">
+            <strong>How we've helped:</strong> A brief description of the foundation's
+            specific contribution — whether that's funding a program, supporting operations,
+            or another form of engagement. Keep this focused and concrete.
+          </div>
+        </div>
+        <!-- Partner 2 -->
+        <div class="partner-card section--alt">
+          <div class="partner-header">
+            <div class="partner-logo">
+              <span class="partner-logo-placeholder">Logo</span>
+            </div>
+            <h2 class="partner-name"><!-- Partner Organization Name --></h2>
+          </div>
+          <p class="partner-description">
+            <!-- PLACEHOLDER -->
+            A description of this partner organization — their mission, the communities
+            they serve, and the model that makes their work effective and enduring.
+            This section should give visitors a clear sense of what the organization
+            does before reading about the foundation's specific involvement.
+          </p>
+          <div class="partner-support">
+            <strong>How we've helped:</strong> A brief description of the foundation's
+            specific contribution to this organization's work.
+          </div>
+        </div>
+        <!-- Partner 3 -->
+        <div class="partner-card">
+          <div class="partner-header">
+            <div class="partner-logo">
+              <span class="partner-logo-placeholder">Logo</span>
+            </div>
+            <h2 class="partner-name"><!-- Partner Organization Name --></h2>
+          </div>
+          <p class="partner-description">
+            <!-- PLACEHOLDER -->
+            A description of this partner organization — their mission, the communities
+            they serve, and the model that makes their work effective and enduring.
+            This section should give visitors a clear sense of what the organization
+            does before reading about the foundation's specific involvement.
+          </p>
+          <div class="partner-support">
+            <strong>How we've helped:</strong> A brief description of the foundation's
+            specific contribution to this organization's work.
+          </div>
+        </div>
+      </div><!-- /.content-panel -->
+    </main>
+  </div><!-- /#barba-wrapper -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three":       "https://esm.sh/three@0.160.0",
+      "gsap":        "https://esm.sh/gsap@3.12.5",
+      "@barba/core": "https://esm.sh/@barba/core@2.9.7"
+    }
+  }
+  </script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

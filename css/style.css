@@ -1,0 +1,497 @@
+/* =============================================================================
+   The Deveraux Family Foundation — Main Stylesheet
+   =============================================================================
+   All design tokens (colors, fonts, spacing) are CSS custom properties at the
+   top of this file. Changing a value here cascades everywhere — start here
+   when you want to tweak the look.
+   ============================================================================= */
+
+/* ── Reset ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scrollbar-gutter: stable; }
+
+/* ── Design Tokens ───────────────────────────────────────────────────────── */
+:root {
+  /* Brand palette — pulled from the logo's greens, teals, and blues */
+  --clr-teal:         #2C7873;
+  --clr-teal-light:   #3D9E98;
+  --clr-blue:         #4A90A4;
+  --clr-blue-light:   #6BB3C4;
+  --clr-green:        #52B788;
+  --clr-dark:         #1B3A4B;   /* primary text */
+  --clr-mid:          #5E7D8C;   /* secondary text */
+  --clr-muted:        #8AABBA;   /* placeholder / tertiary */
+
+  /* Background — warm-tinted off-white that sits behind the Three.js canvas */
+  --clr-bg:           #EEF3F1;
+
+  /* Semi-transparent content panel */
+  --panel-bg:         rgba(255, 255, 255, 0.86);
+  --panel-border:     rgba(44, 120, 115, 0.13);
+  --panel-shadow:     0 6px 48px rgba(27, 58, 75, 0.09);
+  --panel-radius:     16px;
+
+  /* Alternating section tint inside the panel */
+  --section-alt-bg:   rgba(82, 183, 136, 0.06);
+  --section-border:   rgba(44, 120, 115, 0.10);
+
+  /* Typography */
+  --font-display:     'Playfair Display', Georgia, serif;
+  --font-body:        'Inter', system-ui, sans-serif;
+
+  /* Layout */
+  --header-h:         68px;
+  --panel-max-w:      960px;
+  --panel-px:         clamp(1.75rem, 5vw, 3.5rem);
+  --panel-py:         clamp(2rem, 4.5vh, 3.25rem);
+}
+
+/* ── Base ────────────────────────────────────────────────────────────────── */
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.72;
+  color: var(--clr-dark);
+  background-color: var(--clr-bg);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Three.js Background Canvas ──────────────────────────────────────────── */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-h);
+  z-index: 100;
+  background: rgba(238, 243, 241, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.header-inner {
+  max-width: calc(var(--panel-max-w) + 4rem);
+  margin: 0 auto;
+  height: 100%;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* ── Logo ─────────────────────────────────────────────────────────────────── */
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* Uncomment and use .logo-img once you have the PNG */
+.logo-img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.logo-acronym {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--clr-teal);
+  letter-spacing: 0.06em;
+}
+
+.logo-name {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--clr-mid);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Navigation ───────────────────────────────────────────────────────────── */
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.nav-link {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--clr-mid);
+  text-decoration: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: 7px;
+  letter-spacing: 0.02em;
+  transition: color 0.18s ease, background 0.18s ease;
+}
+
+.nav-link:hover {
+  color: var(--clr-teal);
+  background: rgba(44, 120, 115, 0.08);
+}
+
+.nav-link.active {
+  color: var(--clr-teal);
+  background: rgba(44, 120, 115, 0.11);
+  font-weight: 600;
+}
+
+/* ── Barba Wrapper ────────────────────────────────────────────────────────── */
+#barba-wrapper {
+  position: relative;
+  z-index: 10;
+  padding-top: var(--header-h);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Page Container ───────────────────────────────────────────────────────── */
+.page-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2.5rem 1.5rem 4.5rem;
+}
+
+/* ── Content Panel ────────────────────────────────────────────────────────── */
+/*
+  This is the frosted-glass card that sits over the background. Content lives
+  inside here. Margins between the panel and the viewport edges create the
+  "floating" look.
+*/
+.content-panel {
+  width: 100%;
+  max-width: var(--panel-max-w);
+  background: var(--panel-bg);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+  overflow: hidden;
+}
+
+/* ── Sections Inside the Panel ────────────────────────────────────────────── */
+.section {
+  padding: var(--panel-py) var(--panel-px);
+}
+
+/* Every other section gets a soft tint — creates visual breathing room */
+.section--alt {
+  background: var(--section-alt-bg);
+  border-top: 1px solid var(--section-border);
+  border-bottom: 1px solid var(--section-border);
+}
+
+/* ── Typography ───────────────────────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  line-height: 1.22;
+  color: var(--clr-dark);
+}
+
+h2 { font-size: clamp(1.45rem, 3vw, 1.9rem); font-weight: 600; margin-bottom: 1rem; }
+h3 { font-size: clamp(1.1rem, 2vw, 1.3rem);  font-weight: 600; margin-bottom: 0.4rem; }
+
+p {
+  color: var(--clr-dark);
+  margin-bottom: 1rem;
+}
+p:last-child { margin-bottom: 0; }
+
+a             { color: var(--clr-teal); }
+a:hover       { text-decoration: underline; }
+
+/* ── Hero Section (Home) ─────────────────────────────────────────────────── */
+.section--hero {
+  text-align: center;
+  padding-top:    clamp(3rem, 7vh, 5rem);
+  padding-bottom: clamp(3rem, 7vh, 5rem);
+}
+
+.display-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5.5vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: var(--clr-dark);
+  margin-bottom: 1.4rem;
+}
+
+.tagline {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-style: italic;
+  color: var(--clr-mid);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── Page Title Section ───────────────────────────────────────────────────── */
+.section--page-title {
+  padding-bottom: calc(var(--panel-py) * 0.85);
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+  font-weight: 700;
+  color: var(--clr-dark);
+  margin-bottom: 0.45rem;
+}
+
+.page-subtitle {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--clr-mid);
+}
+
+/* ── Team Grid (About page) ───────────────────────────────────────────────── */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 2.25rem 2rem;
+  margin-top: 1.75rem;
+}
+
+.team-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Circular headshot container */
+.headshot {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  background: var(--section-alt-bg);
+  border: 2px solid var(--section-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.headshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* SVG placeholder shown when no headshot image is available */
+.headshot-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--clr-muted);
+}
+
+.headshot-placeholder svg {
+  width: 54%;
+  height: 54%;
+}
+
+.team-card .member-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--clr-dark);
+  margin-bottom: 0.2rem;
+}
+
+.team-card .member-role {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--clr-teal);
+  margin-bottom: 0.75rem;
+}
+
+.team-card .member-bio {
+  font-size: 0.875rem;
+  color: var(--clr-mid);
+  line-height: 1.65;
+  text-align: left;
+}
+
+/* ── Partner Cards (Partners page) ───────────────────────────────────────── */
+.partner-card {
+  padding: var(--panel-py) var(--panel-px);
+}
+
+.partner-card + .partner-card {
+  border-top: 1px solid var(--section-border);
+}
+
+.partner-header {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  margin-bottom: 1.1rem;
+}
+
+/* Partner logo container */
+.partner-logo {
+  width: 84px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--panel-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.partner-logo img {
+  max-width: 88%;
+  max-height: 88%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Text shown when no logo image is available */
+.partner-logo-placeholder {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--clr-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  text-align: center;
+  padding: 0.25rem;
+}
+
+.partner-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+  color: var(--clr-dark);
+  margin: 0;
+}
+
+.partner-description {
+  font-size: 0.95rem;
+  color: var(--clr-mid);
+  line-height: 1.72;
+  margin-bottom: 0.85rem;
+}
+
+.partner-support {
+  font-size: 0.9rem;
+  color: var(--clr-teal);
+  line-height: 1.65;
+  padding: 0.85rem 1rem;
+  background: rgba(44, 120, 115, 0.06);
+  border-left: 3px solid var(--clr-teal);
+  border-radius: 0 6px 6px 0;
+}
+
+.partner-support strong {
+  font-weight: 600;
+}
+
+/* ── Contact Page ─────────────────────────────────────────────────────────── */
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 9px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background 0.18s ease, transform 0.15s ease, box-shadow 0.18s ease;
+}
+
+.contact-btn:hover {
+  transform: translateY(-2px);
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(27, 58, 75, 0.1);
+}
+
+.contact-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.contact-btn--email {
+  background: rgba(44, 120, 115, 0.09);
+  color: var(--clr-teal);
+  border-color: rgba(44, 120, 115, 0.22);
+}
+
+.contact-btn--email:hover {
+  background: rgba(44, 120, 115, 0.15);
+}
+
+.contact-btn--linkedin {
+  background: rgba(74, 144, 164, 0.09);
+  color: var(--clr-blue);
+  border-color: rgba(74, 144, 164, 0.22);
+}
+
+.contact-btn--linkedin:hover {
+  background: rgba(74, 144, 164, 0.15);
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .logo-name     { display: none; }
+  .page-container { padding: 1.5rem 1rem 3rem; }
+
+  .partner-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — The Deveraux Family Foundation</title>
+  <meta name="description" content="Meet the people behind the Deveraux Family Foundation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo-link">
+        <!-- <img src="assets/logo.png" alt="The Deveraux Family Foundation" class="logo-img" /> -->
+        <div class="logo-text">
+          <span class="logo-acronym">DFF</span>
+          <span class="logo-name">The Deveraux Family Foundation</span>
+        </div>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html"    class="nav-link">Home</a>
+        <a href="about.html"    class="nav-link">About Us</a>
+        <a href="partners.html" class="nav-link">Partners</a>
+        <a href="contact.html"  class="nav-link">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <div id="barba-wrapper" data-barba="wrapper">
+    <main class="page-container"
+          data-barba="container"
+          data-barba-namespace="about">
+
+      <div class="content-panel">
+        <!-- Page title -->
+        <section class="section section--page-title">
+          <h1 class="page-title">About Us</h1>
+          <p class="page-subtitle">The people behind the foundation.</p>
+        </section>
+        <!-- Team -->
+        <section class="section section--alt">
+          <h2>Our Team</h2>
+          <div class="team-grid">
+            <!--
+              TO ADD A REAL HEADSHOT:
+              1. Place the image in assets/ (e.g. assets/headshot-jane.jpg)
+              2. Replace the entire .headshot-placeholder div with:
+                 <img src="assets/headshot-jane.jpg" alt="Jane Deveraux" />
+              3. The .headshot wrapper handles sizing and circular crop automatically.
+            -->
+            <!-- Team Member 1 -->
+            <div class="team-card">
+              <div class="headshot">
+                <div class="headshot-placeholder" aria-hidden="true">
+                  <!-- Generic person silhouette -->
+                  <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="28" r="16" fill="currentColor" opacity="0.35"/>
+                    <path d="M10 72c0-16.569 13.431-30 30-30s30 13.431 30 30" fill="currentColor" opacity="0.25"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="member-name"><!-- Name --></p>
+              <p class="member-role"><!-- Role, e.g. "Founder &amp; President" --></p>
+              <p class="member-bio">
+                <!-- PLACEHOLDER — replace with a 2–3 sentence bio. -->
+                A brief bio describing this person's background, their connection to the foundation,
+                and what drives their commitment to this work.
+              </p>
+            </div>
+            <!-- Team Member 2 -->
+            <div class="team-card">
+              <div class="headshot">
+                <div class="headshot-placeholder" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="28" r="16" fill="currentColor" opacity="0.35"/>
+                    <path d="M10 72c0-16.569 13.431-30 30-30s30 13.431 30 30" fill="currentColor" opacity="0.25"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="member-name"><!-- Name --></p>
+              <p class="member-role"><!-- Role --></p>
+              <p class="member-bio">
+                <!-- PLACEHOLDER -->
+                A brief bio describing this person's background, their connection to the foundation,
+                and what drives their commitment to this work.
+              </p>
+            </div>
+            <!-- Team Member 3 -->
+            <div class="team-card">
+              <div class="headshot">
+                <div class="headshot-placeholder" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="28" r="16" fill="currentColor" opacity="0.35"/>
+                    <path d="M10 72c0-16.569 13.431-30 30-30s30 13.431 30 30" fill="currentColor" opacity="0.25"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="member-name"><!-- Name --></p>
+              <p class="member-role"><!-- Role --></p>
+              <p class="member-bio">
+                <!-- PLACEHOLDER -->
+                A brief bio describing this person's background, their connection to the foundation,
+                and what drives their commitment to this work.
+              </p>
+            </div>
+            <!-- Team Member 4 -->
+            <div class="team-card">
+              <div class="headshot">
+                <div class="headshot-placeholder" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="28" r="16" fill="currentColor" opacity="0.35"/>
+                    <path d="M10 72c0-16.569 13.431-30 30-30s30 13.431 30 30" fill="currentColor" opacity="0.25"/>
+                  </svg>
+                </div>
+              </div>
+              <p class="member-name"><!-- Name --></p>
+              <p class="member-role"><!-- Role --></p>
+              <p class="member-bio">
+                <!-- PLACEHOLDER -->
+                A brief bio describing this person's background, their connection to the foundation,
+                and what drives their commitment to this work.
+              </p>
+            </div>
+          </div><!-- /.team-grid -->
+        </section>
+        <!-- Values / Approach -->
+        <section class="section">
+          <h2>Our Approach</h2>
+          <!--
+            PLACEHOLDER — describe how the foundation selects and engages with partners.
+          -->
+          <p>
+            We believe in giving that is intentional and relational. Before committing support
+            to any organization, we invest time in understanding their model, their leadership,
+            and the people they serve. We are not a check-writing operation — we show up as
+            genuine partners.
+          </p>
+          <p>
+            We also believe in humility. The organizations we support are the experts in their
+            domains. Our role is to remove friction, not create it.
+          </p>
+        </section>
+      </div><!-- /.content-panel -->
+    </main>
+  </div><!-- /#barba-wrapper -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three":       "https://esm.sh/three@0.160.0",
+      "gsap":        "https://esm.sh/gsap@3.12.5",
+      "@barba/core": "https://esm.sh/@barba/core@2.9.7"
+    }
+  }
+  </script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
