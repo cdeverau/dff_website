@@ -250,7 +250,6 @@ p {
 p:last-child { margin-bottom: 0; }
 
 a             { color: var(--clr-teal); }
-a:hover       { text-decoration: underline; }
 
 /* ── Hero Section (Home) ─────────────────────────────────────────────────── */
 .section--hero {
