@@ -2,8 +2,10 @@
 # Docs: https://docs.netlify.com/configure-builds/file-based-configuration/
 
 [build]
-  # Serve from the repo root (no build step needed for a static site)
-  publish = "."
+  # Publish only the public/ subdirectory. Keeping repo metadata (.git, .claude,
+  # CLAUDE.md, netlify.toml itself) outside the served tree means a local dev
+  # server run against public/ can't expose them either.
+  publish = "public"
 
 # ── Security headers applied to every response ───────────────────────────────
 [[headers]]
